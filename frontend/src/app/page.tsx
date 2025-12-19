@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import Image from "next/image";
+import ComparisonSlider from "@/components/ComparisonSlider";
 
 // Theme Data
 const themes = [
@@ -44,59 +45,55 @@ export default function Home() {
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 
           {/* Text */}
-          <div className="z-10">
-            <div className="inline-block px-4 py-2 bg-orange-100 text-brand-orange font-bold rounded-full text-sm mb-6">
+          <div className="z-10 order-2 md:order-1">
+            <div className="inline-block px-4 py-2 bg-orange-100 text-brand-orange font-bold rounded-full text-sm mb-6 animate-fade-in-up">
               ✨ Neu: Jetzt mit Pixar-Quality AI
             </div>
-            <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 leading-tight mb-6">
+            <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 leading-tight mb-6 animate-fade-in-up delay-100">
               Dein Kind wird <br />
               <span className="text-brand-blue">zum Helden</span>
             </h1>
-            <p className="text-xl text-slate-500 mb-8 max-w-lg leading-relaxed">
+            <p className="text-xl text-slate-500 mb-8 max-w-lg leading-relaxed animate-fade-in-up delay-200">
               Personalisierte Kinderbücher mit echter KI-Magie. Erstelle in wenigen Minuten ein unvergessliches Geschenk.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <Link href="/create" className="btn-orange text-lg px-10 py-4 shadow-orange-200">
-                Jetzt buch erstellen
+            <div className="flex flex-col sm:flex-row gap-4 mb-12 animate-fade-in-up delay-300">
+              <Link href="/create" className="btn-primary text-lg px-10 py-4 shadow-blue-200">
+                Jetzt Buch erstellen
               </Link>
-              <div className="flex items-center gap-2 text-sm font-bold text-slate-500 px-4">
-                <span>⭐⭐⭐⭐⭐</span>
-                <span>4.9/5 von Eltern</span>
-              </div>
+              <Link href="#how-it-works" className="btn-secondary text-lg px-10 py-4">
+                So funktioniert's
+              </Link>
             </div>
 
-            <div className="flex gap-6 text-sm font-bold text-slate-400">
-              <span className="flex items-center gap-2">🛡️ Made in Germany</span>
-              <span className="flex items-center gap-2">🌿 Klimaneutral</span>
+            <div className="flex items-center gap-2 text-sm font-bold text-slate-500 animate-fade-in-up delay-400">
+              <div className="flex text-yellow-400">★★★★★</div>
+              <span>4.9/5 von über 10.000 Eltern</span>
             </div>
           </div>
 
-          {/* Image / Mascot */}
-          <div className="relative">
+          {/* Slider / Visual */}
+          <div className="relative order-1 md:order-2">
             {/* Background Blob */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-100 rounded-full blur-3xl opacity-50"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-100 rounded-full blur-3xl opacity-50 -z-10"></div>
 
-            {/* Mascot floating */}
-            <div className="relative z-10 animate-float">
-              {/* Placeholder until real asset is available */}
-              <div className="relative w-full aspect-square max-w-[500px] mx-auto">
-                <Image
-                  src="/assets/mascot/bear-waving.png"
-                  alt="Bookloo Bär winkt"
-                  fill
-                  className="object-contain"
-                  priority
-                  onError={(e) => {
-                    // Fallback logic if image missing
-                    e.currentTarget.style.display = "none";
-                  }}
-                />
-                {/* Fallback visual if image fails to load */}
-                <div className="absolute inset-0 flex items-center justify-center bg-blue-50/50 rounded-full border-4 border-white shadow-xl -z-10">
-                  <span className="text-9xl">🐻</span>
-                </div>
-              </div>
+            {/* Comparison Slider */}
+            <div className="relative w-full aspect-[4/5] max-w-[500px] mx-auto shadow-2xl rounded-3xl overflow-hidden border-4 border-white transform rotate-2 hover:rotate-0 transition-transform duration-500">
+              <ComparisonSlider
+                imageBefore="/assets/landing/slider-before.png"
+                imageAfter="/assets/landing/slider-after.png"
+                labelBefore="Original"
+                labelAfter="Held"
+                orientation="horizontal"
+                className="h-full"
+              />
+            </div>
+            {/* Decorative Elements */}
+            <div className="absolute -top-6 -right-6 bg-white p-4 rounded-2xl shadow-xl animate-bounce delay-700 hidden md:block">
+              <span className="text-4xl">✨</span>
+            </div>
+            <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl animate-bounce delay-1000 hidden md:block">
+              <span className="text-4xl">🪄</span>
             </div>
           </div>
 
