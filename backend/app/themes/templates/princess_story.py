@@ -3,6 +3,7 @@
 Princess Kingdom Theme for Storybook.ai (V2 - Flux Kontext)
 Uses Flux Kontext for scene generation with character preservation.
 """
+from .prompt_constants import QUALITY_BOOSTER
 
 PRINCESS_THEME = {
     "theme_id": "princess",
@@ -15,7 +16,7 @@ PRINCESS_THEME = {
             "type": "cover",
             "is_preview": True,
             "text": "Prinzessin {name} im Zauberland",
-            "image_prompt": "Pixar 3D style, epic movie poster shot. The character from the reference image, who is a {character_desc}, {outfit}, is standing on a castle balcony. In the background a fairytale castle with tall spires and pink clouds. Magical sparkles, golden hour lighting, masterpiece, 8k."
+            "image_prompt": f"Epic cinematic portrait of the character from the reference image, who is a {{character_desc}}, {{outfit}}, standing gracefully on a castle balcony. Expressive joy in sparkling eyes. Fairytale castle with tall spires and pink clouds in background. Golden hour warm lighting, magical sparkles. {QUALITY_BOOSTER}"
         },
         # SCENE 1: BEDROOM (INTRO)
         {

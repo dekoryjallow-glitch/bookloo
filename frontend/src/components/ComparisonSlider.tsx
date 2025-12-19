@@ -21,7 +21,7 @@ export default function ComparisonSlider({
     orientation = "vertical", // Match the vertical card design
     objectPosition = "center",
 }: ComparisonSliderProps) {
-    const [sliderPosition, setSliderPosition] = useState(100);
+    const [sliderPosition, setSliderPosition] = useState(50);
     const [isDragging, setIsDragging] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 

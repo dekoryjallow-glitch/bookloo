@@ -3,6 +3,7 @@
 Pirate Adventure Theme for Storybook.ai (V2 - Flux Kontext)
 Uses Flux Kontext for scene generation with character preservation.
 """
+from .prompt_constants import QUALITY_BOOSTER
 
 PIRATE_THEME = {
     "theme_id": "pirate",
@@ -15,7 +16,7 @@ PIRATE_THEME = {
             "type": "cover",
             "is_preview": True,
             "text": "Kapitän {name} und der Insel-Schatz",
-            "image_prompt": "Pixar 3D style, epic movie poster shot. The character from the reference image, who is a {character_desc}, {outfit}, is standing on the wooden deck of a grand pirate ship with white sails. Golden hour lighting, tropical islands in background, magical atmosphere, 8k resolution, masterpiece."
+            "image_prompt": f"Epic cinematic portrait of the character from the reference image, who is a {{character_desc}}, {{outfit}}, standing heroically on the deck of a grand pirate ship. Expressive adventure spirit in sparkling eyes. White sails billowing, tropical islands in background. Golden hour dramatic lighting. {QUALITY_BOOSTER}"
         },
         # SCENE 1: BATHTUB/PLAYING (INTRO)
         {

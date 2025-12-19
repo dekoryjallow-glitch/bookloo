@@ -3,6 +3,7 @@
 Magic Forest Theme for Storybook.ai (V2 - Flux Kontext)
 Uses Flux Kontext for scene generation with character preservation.
 """
+from .prompt_constants import QUALITY_BOOSTER
 
 FOREST_THEME = {
     "theme_id": "forest",
@@ -15,7 +16,7 @@ FOREST_THEME = {
             "type": "cover",
             "is_preview": True,
             "text": "{name} im Zauberwald",
-            "image_prompt": "Pixar 3D style, epic movie poster shot. The character from the reference image, who is a {character_desc}, {outfit}, is sitting on a giant glowing mushroom in a magical forest. Surrounded by floating fireflies and sparkles. Mysterious blue and green lighting, masterpiece, 8k."
+            "image_prompt": f"Epic cinematic portrait of the character from the reference image, who is a {{character_desc}}, {{outfit}}, sitting on a giant glowing mushroom in a magical enchanted forest. Expressive curiosity in sparkling eyes. Floating fireflies, bioluminescent plants. Mysterious blue and green volumetric lighting. {QUALITY_BOOSTER}"
         },
         # SCENE 1: GARDEN HEDGE (INTRO)
         {

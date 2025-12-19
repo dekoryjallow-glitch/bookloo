@@ -3,6 +3,7 @@
 Underwater Magic Theme for Storybook.ai (V2 - Flux Kontext)
 Uses Flux Kontext for scene generation with character preservation.
 """
+from .prompt_constants import QUALITY_BOOSTER
 
 UNDERWATER_THEME = {
     "theme_id": "underwater",
@@ -15,7 +16,7 @@ UNDERWATER_THEME = {
             "type": "cover",
             "is_preview": True,
             "text": "{name} und das Meeres-Wunder",
-            "image_prompt": "Pixar 3D style, epic movie poster shot. The character from the reference image, who is a {character_desc}, {outfit}, has a glittering mermaid tail and is swimming underwater alongside a friendly dolphin. Sunlight rays piercing through the blue water. Colorful coral reef background, bubbles, masterpiece, 8k."
+            "image_prompt": f"Epic cinematic portrait of the character from the reference image, who is a {{character_desc}}, {{outfit}}, with a glittering mermaid tail swimming gracefully alongside a friendly dolphin. Expressive wonder in sparkling eyes. Dappled underwater light rays, colorful coral reef background. {QUALITY_BOOSTER}"
         },
         # SCENE 1: BEACH DISCOVERY (INTRO)
         {

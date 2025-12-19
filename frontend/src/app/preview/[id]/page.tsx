@@ -351,13 +351,13 @@ export default function PreviewPage() {
 
                     {/* Full Size Image */}
                     <div
-                        className="max-w-4xl max-h-[90vh] rounded-2xl overflow-hidden shadow-2xl"
+                        className="relative max-h-[90vh] flex items-center justify-center"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <img
                             src={lightboxImage}
                             alt="Full size preview"
-                            className="w-full h-full object-contain"
+                            className="max-w-[90vw] max-h-[90vh] object-contain rounded-2xl shadow-2xl"
                         />
                     </div>
 

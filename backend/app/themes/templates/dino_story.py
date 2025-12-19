@@ -3,6 +3,7 @@
 Dino Explorer Theme for Storybook.ai (V2 - Flux Kontext)
 Uses Flux Kontext for scene generation with character preservation.
 """
+from .prompt_constants import QUALITY_BOOSTER
 
 DINO_THEME = {
     "theme_id": "dino",
@@ -15,7 +16,7 @@ DINO_THEME = {
             "type": "cover",
             "is_preview": True,
             "text": "{name} im Land der Dinos",
-            "image_prompt": "Pixar 3D style, epic movie poster shot. The character from the reference image, who is a {character_desc}, {outfit}, is standing confidently in a prehistoric jungle, surrounded by friendly colorful dinosaurs like a Triceratops and a Brachiosaurus. Golden hour lighting, magical atmosphere, 8k resolution, masterpiece."
+            "image_prompt": f"Epic cinematic portrait of the character from the reference image, who is a {{character_desc}}, {{outfit}}, standing confidently in a prehistoric jungle. Expressive wonder in sparkling eyes. Friendly Triceratops and Brachiosaurus in background. Golden hour warm backlight, volumetric fog. {QUALITY_BOOSTER}"
         },
         # SCENE 1: GARDEN DISCOVERY (INTRO)
         {

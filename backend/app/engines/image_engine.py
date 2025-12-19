@@ -117,12 +117,21 @@ class ImageEngine:
             
             print(f"   🎨 queueing scene {scene_num}: {prompt[:50]}...")
             
-            tasks.append(
-                self._run_kontext(
-                    image_url=character_asset_url, 
-                    prompt=prompt
+            if scene_num == 0:
+                # Use specialized high-quality cover generation for Scene 0
+                tasks.append(
+                    self.generate_cover_image(
+                        character_asset_url=character_asset_url,
+                        cover_prompt=prompt
+                    )
                 )
-            )
+            else:
+                tasks.append(
+                    self._run_kontext(
+                        image_url=character_asset_url, 
+                        prompt=prompt
+                    )
+                )
 
         print(f"   🚀 Running {len(tasks)} scene generations SEQUENTIALLY (Rate Limit Safe)...")
         
@@ -200,6 +209,62 @@ class ImageEngine:
                 return result_url
             except Exception as e:
                 print(f"   ❌ Flux API Error: {e}")
+                import traceback
+                traceback.print_exc()
+                raise
+        
+        return await loop.run_in_executor(None, run_sync)
+    
+    # === COVER-SPECIFIC GENERATION ===
+    # Quality string for cover images
+    COVER_QUALITY_BOOST = (
+        "Detailed texture, 8k, sharp focus on eyes, masterpiece, "
+        "professional photography lighting, cinematic portrait."
+    )
+    
+    async def generate_cover_image(
+        self,
+        character_asset_url: str,
+        cover_prompt: str,
+    ) -> str:
+        """
+        Generate cover image with maximum character consistency.
+        
+        Uses lower guidance and higher quality settings to preserve
+        facial features from the character asset.
+        """
+        # Strict validation - cover MUST have character reference
+        if not character_asset_url or not character_asset_url.startswith("http"):
+            raise ValueError(
+                "Character asset URL is REQUIRED for cover generation! "
+                f"Got: {character_asset_url}"
+            )
+        
+        # Inject quality boost into prompt
+        enhanced_prompt = f"{cover_prompt} {self.COVER_QUALITY_BOOST}"
+        
+        print(f"🎨 Generating COVER image...")
+        print(f"   📝 Enhanced Prompt: {enhanced_prompt[:100]}...")
+        print(f"   🖼️ Character Asset: {character_asset_url[:80]}...")
+        
+        loop = asyncio.get_event_loop()
+        
+        def run_sync():
+            try:
+                output = self.client.run(
+                    self.MODEL_KONTEXT,
+                    input={
+                        "prompt": enhanced_prompt,
+                        "img_cond_path": character_asset_url,
+                        "guidance": 2.0,  # Lower = more faithful to reference face
+                        "speed_mode": "High Quality",  # Max quality for cover
+                    }
+                )
+                result_url = self._extract_url(output)
+                print(f"   ✅ Cover generated: {result_url[:50]}...")
+                return result_url
+            except Exception as e:
+                print(f"   ❌ Cover generation failed: {e}")
                 import traceback
                 traceback.print_exc()
                 raise

@@ -6,6 +6,7 @@ Uses Flux Kontext for scene generation with character preservation.
 NOTE: Image prompts describe "the character from the reference image" because
 Flux Kontext uses the input_image directly for character preservation.
 """
+from .prompt_constants import QUALITY_BOOSTER
 
 SPACE_TEMPLATE = {
     "theme_id": "space",
@@ -18,7 +19,7 @@ SPACE_TEMPLATE = {
             "type": "cover",
             "is_preview": True,
             "text": "{name} greift nach den Sternen",
-            "image_prompt": "A cinematic movie poster shot of the character from the reference image, who is a {character_desc}, floating in deep space. The character is smiling confidently. Background is a magical galaxy with purple nebulas and bright stars. High resolution, 3D Pixar style masterpiece."
+            "image_prompt": f"Epic cinematic close-up portrait of the character from the reference image, who is a {{character_desc}}, floating in deep space. Expressive wonder in sparkling eyes. Background: detailed purple galaxy nebula with swirling cosmic dust. Rim lighting on the suit, volumetric star glow. {QUALITY_BOOSTER}"
         },
         # SCENE 1: BEDROOM (INTRO)
         {
