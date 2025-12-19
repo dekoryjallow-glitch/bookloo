@@ -88,10 +88,10 @@ export default function Home() {
             {/* Slider Frame */}
             <div className="relative aspect-[16/9] md:aspect-[2/1] w-full shadow-2xl shadow-blue-900/10 rounded-[2.5rem] overflow-hidden border-8 border-white bg-white">
               <ComparisonSlider
-                imageBefore="/assets/landing/slider-before.png"
-                imageAfter="/assets/landing/slider-after.png"
+                imageBefore="/assets/hero/hero-comparison-real.jpg"
+                imageAfter="/assets/hero/hero-comparison-pixar.jpg"
                 labelBefore="Original"
-                labelAfter="Held"
+                labelAfter="Zauberhaft"
                 orientation="horizontal"
                 className="h-full"
               />

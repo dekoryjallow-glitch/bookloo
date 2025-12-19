@@ -9,6 +9,7 @@ interface ComparisonSliderProps {
     labelAfter?: string;
     className?: string;
     orientation?: "horizontal" | "vertical";
+    objectPosition?: string;
 }
 
 export default function ComparisonSlider({
@@ -18,6 +19,7 @@ export default function ComparisonSlider({
     labelAfter = "Generated",
     className = "",
     orientation = "vertical", // Match the vertical card design
+    objectPosition = "center",
 }: ComparisonSliderProps) {
     const [sliderPosition, setSliderPosition] = useState(100);
     const [isDragging, setIsDragging] = useState(false);
@@ -76,6 +78,7 @@ export default function ComparisonSlider({
                 src={imageAfter}
                 alt="After"
                 className="absolute inset-0 w-full h-full object-cover"
+                style={{ objectPosition }}
                 draggable={false}
             />
 
@@ -99,6 +102,7 @@ export default function ComparisonSlider({
                     src={imageBefore}
                     alt="Before"
                     className="absolute inset-0 w-full h-full object-cover"
+                    style={{ objectPosition }}
                     draggable={false}
                 />
 
