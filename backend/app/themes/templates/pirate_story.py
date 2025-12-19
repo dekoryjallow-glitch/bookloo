@@ -79,7 +79,7 @@ PIRATE_THEME = {
             "type": "story",
             "is_preview": False,
             "text": "Die Kiste geht auf, es knarrt und es klemmt, {name} findet darin Goldmünzen und Perlen, so viel man nur kann! Was für ein Fang!",
-            "image_prompt": "Pixar 3D style, looking into an open treasure chest. The character from the reference image, {outfit}, is kneeling behind the chest, face illuminated by the golden glow. 3D Pixar style."
+            "image_prompt": "Pixar 3D style, atmospheric cave interior shot. The character from the reference image, {outfit}, is kneeling behind a large open wooden treasure chest, face illuminated by the warm golden glow of overflowing gold coins, jewels and pearls. Ancient stone walls, spider webs in corners, sense of discovery and wonder."
         },
         # SCENE 9: STORM BATTLE (NEW)
         {
@@ -87,7 +87,7 @@ PIRATE_THEME = {
             "type": "story",
             "is_preview": False,
             "text": "Die Wellen sie peitschen, der Himmel wird grau, 'Festhalten!', ruft {name}, 'ich weiß es genau!' Kapitän {name} hält das Steuer ganz fest, bis sich der Sturm langsam wieder verlässt.",
-            "image_prompt": "Pixar 3D style, dramatic action shot. The character from the reference image is at the ship's wheel during a storm. Big waves, rain, dark clouds, lightning in the distance. 3D Pixar style."
+            "image_prompt": "Pixar 3D style, dramatic action shot during a storm at sea. The character from the reference image, {outfit}, is gripping the ship's wooden wheel tightly with determined expression. Massive dark waves crashing, rain pouring, lightning illuminating dark clouds, the parrot holding on nearby. Heroic and intense atmosphere."
         },
         # SCENE 10: BEACH PARTY (NEW)
         {
@@ -95,7 +95,7 @@ PIRATE_THEME = {
             "type": "story",
             "is_preview": False,
             "text": "Sonne und Sand, wir feiern ein Fest, die Krabben sie tanzen, wer ist der Best'? Musik erklingt aus Muscheln so groß, bei Kapitän {name} ist heute was los!",
-            "image_prompt": "Pixar 3D style, festive beach scene. The character from the reference image is dancing on the sand with crabs and the parrot. Tropical fruits, bright sun, turquoise water. 3D Pixar style."
+            "image_prompt": "Pixar 3D style, joyful wide shot of a tropical beach party. The character from the reference image, {outfit}, is dancing barefoot on the warm sand, surrounded by cute crabs playing tiny coconut drums and the colorful parrot. Musical notes floating in air, tropical fruits on a makeshift table, palm trees swaying, turquoise water sparkling, celebration atmosphere."
         },
         # SCENE 11: SAILING HOME
         {
@@ -103,7 +103,7 @@ PIRATE_THEME = {
             "type": "story",
             "is_preview": False,
             "text": "Die Taschen sind voll, die Sonne sinkt tief, das Schiff segelt heim, während alles schon schlief. Der Papagei winkt, die Insel wird klein, bald wird {name} wieder zuhause sein.",
-            "image_prompt": "Pixar 3D style, sunset shot on the ship. The character from the reference image, {outfit}, is steering towards the sunset. Warm orange light, silhouette of the island. 3D Pixar style."
+            "image_prompt": "Pixar 3D style, peaceful sunset sailing shot from behind the ship. The character from the reference image, {outfit}, is standing at the ship's wheel steering towards a magnificent orange and pink sunset. The treasure island is a small silhouette in the distance. Calm golden waters, seagulls flying, sails catching warm light, nostalgic peaceful atmosphere."
         },
         # SCENE 12: BACK HOME
         {
@@ -111,7 +111,7 @@ PIRATE_THEME = {
             "type": "story",
             "is_preview": False,
             "text": "Im Bett liegt nun {name}, das Abenteuer war toll, der Kopf ist von Träumen und Seemannsgarn voll. Die Mama gibt einen Kuss auf die Stirn, 'Schlaf gut, kleiner Kapitän'.",
-            "image_prompt": "Pixar 3D style, bedroom setting. The character from the reference image is in bed, cozy blankets. Mom is tucking them in. Soft lighting. 3D Pixar style."
+            "image_prompt": "Pixar 3D style, cozy bedroom scene at night. The character from the reference image is tucked into a comfortable bed with soft blankets, eyes closing peacefully. Mom is leaning over giving a gentle goodnight kiss on the forehead. Warm lamp light, toys visible on shelves, moonlight through window, loving tender atmosphere."
         },
         # SCENE 13: THE SOUVENIR
         {

@@ -71,7 +71,7 @@ PRINCESS_THEME = {
             "type": "story",
             "is_preview": False,
             "text": "Am Abend ein Ball, die Musik spielt so laut, jeder hat auf Prinzessin {name} geschaut. Tanzend im Kreis, unter Lichtern so bunt, zu einer fröhlichen, magischen Stund.",
-            "image_prompt": "Pixar 3D style, inside a grand ballroom. The character from the reference image, {outfit}, is dancing in the center. Dress is twirling. Festive atmosphere. 3D Pixar style."
+            "image_prompt": "Pixar 3D style, wide shot inside a grand ballroom with crystal chandeliers. The character from the reference image, {outfit}, is dancing gracefully in the center of the dance floor. Dress is twirling beautifully. Golden candles, elegant guests watching, magical sparkles in the air, warm festive atmosphere."
         },
         # SCENE 8: THE DRAGON FRIEND (NEW)
         {
@@ -79,7 +79,7 @@ PRINCESS_THEME = {
             "type": "story",
             "is_preview": False,
             "text": "Über den Mauern, wer guckt denn da rein? Ein freundlicher Drache, so zahm und so fein! Er pustet kleine Herzen aus glühendem Rauch, {name} lacht laut und streichelt ihn auch.",
-            "image_prompt": "Pixar 3D style, on the castle balcony. The character from the reference image, {outfit}, is petting a friendly purple dragon that is puffing out heart-shaped smoke clouds. 3D Pixar style."
+            "image_prompt": "Pixar 3D style, medium shot on a castle balcony at sunset. The character from the reference image, {outfit}, is gently petting a friendly purple dragon that is puffing out heart-shaped pink smoke clouds. The dragon looks adorable with big eyes. Orange and purple sky in background, magical atmosphere."
         },
         # SCENE 9: THE SECRET LIBRARY (NEW)
         {
@@ -87,7 +87,7 @@ PRINCESS_THEME = {
             "type": "story",
             "is_preview": False,
             "text": "In der Bibliothek, da schweben die Bücher, Geschichten erzählen sie, ohne Tücher! 'Lies uns!', rufen sie, 'wir haben viel zu berichten!', von Helden und Feen und fabelhaften Geschichten.",
-            "image_prompt": "Pixar 3D style, inside a magical library. Glowing books are flying through the air around the character from the reference image, {outfit}. Golden lighting, dust motes. 3D Pixar style."
+            "image_prompt": "Pixar 3D style, wide angle shot inside a towering magical library with endless bookshelves. Glowing books are flying through the air around the character from the reference image, {outfit}. The character reaches up to catch one. Golden sunlight streaming through tall windows, dust motes sparkling, mystical atmosphere."
         },
         # SCENE 10: THE ROYAL FEAST (NEW)
         {
@@ -95,7 +95,7 @@ PRINCESS_THEME = {
             "type": "story",
             "is_preview": False,
             "text": "Ein Festmahl wird serviert, auf Tellern aus Gold, so viel wie Prinzessin {name} nur wollt'. Es gibt Honigkuchen und Beerensaft klar, es schmeckt einfach königlich und wunderbar.",
-            "image_prompt": "Pixar 3D style, inside a dining hall. The character from the reference image, {outfit}, is sitting at a long table filled with magical food. Friendly animals are sitting nearby. 3D Pixar style."
+            "image_prompt": "Pixar 3D style, wide shot inside a royal dining hall with a long golden table. The character from the reference image, {outfit}, is sitting at the head of the table surrounded by colorful magical desserts and treats. Cute animals (bunnies, squirrels) are seated as guests. Warm candlelight, elegant atmosphere."
         },
         # SCENE 11: THE SOUVENIR
         {
@@ -103,7 +103,7 @@ PRINCESS_THEME = {
             "type": "story",
             "is_preview": False,
             "text": "Das Einhorn schenkt noch eine Blume aus Glas, 'Damit du uns niemals vergisst, macht das Spaß?' Sie leuchtet wie Sterne, sie duftet nach Glück, doch nun muss {name} leider zurück.",
-            "image_prompt": "Pixar 3D style, emotional close up. The character from the reference image, {outfit}, is holding a glowing crystal flower. Magical sparkles. 3D Pixar style."
+            "image_prompt": "Pixar 3D style, emotional close-up shot. The unicorn gently places a glowing crystal flower into the hands of the character from the reference image, {outfit}. Soft magical glow illuminating the character's grateful face, sparkles and light particles floating around, bittersweet farewell atmosphere."
         },
         # SCENE 12: FADING MAGIC
         {
@@ -111,7 +111,7 @@ PRINCESS_THEME = {
             "type": "story",
             "is_preview": False,
             "text": "Das Schloss wird zu Nebel, die Musik wird ganz still, auch wenn {name} noch gar nicht nach Hause will. Die Augen fallen zu, der Traum ist vorbei.",
-            "image_prompt": "Pixar 3D style, transition scene. The character from the reference image amidst swirling magical mist. Bedroom walls appearing. 3D Pixar style."
+            "image_prompt": "Pixar 3D style, dreamy transition scene. The character from the reference image is standing amidst swirling magical purple and gold mist. The fairy tale castle is fading into the mist behind, while the familiar bedroom walls are reappearing around. Soft ethereal lighting, peaceful expression, magical dust particles."
         },
         # SCENE 13: BACK HOME
         {

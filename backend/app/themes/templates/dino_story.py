@@ -79,7 +79,7 @@ DINO_THEME = {
             "type": "story",
             "is_preview": False,
             "text": "Ein Wasserfall glitzert, so klar und so rein, 'Komm', ruft ein Dino, 'wir springen hinein!' Das Wasser spritzt hoch, eine kühlende Pracht, {name} hat im Wasser ganz laut gelacht.",
-            "image_prompt": "Pixar 3D style, action shot. The character from the reference image is jumping into a crystal clear jungle pool under a waterfall. Friendly water dinosaurs are splashing around. Tropical flowers, bright sun. 3D Pixar style."
+            "image_prompt": "Pixar 3D style, dynamic action shot at a jungle waterfall. The character from the reference image, {outfit}, is mid-jump splashing into a crystal clear turquoise pool. Friendly small dinosaurs are swimming and splashing nearby. Tropical flowers frame the scene, bright sunlight creating rainbows in the water spray, joyful atmosphere."
         },
         # SCENE 9: VOLCANO DISCOVERY (NEW)
         {
@@ -87,7 +87,7 @@ DINO_THEME = {
             "type": "story",
             "is_preview": False,
             "text": "In der Ferne, da dampft es, ein Berg voller Rauch, 'Ein Vulkan!', ruft {name}, 'und guck mal dort auch!' Die Erde ist warm, die Steine sind bunt, hier gibt es Abenteuer zu jeder Stund.",
-            "image_prompt": "Pixar 3D style, wide shot. The character from the reference image is standing on a ridge overlooking a smoking (not erupting) volcano in the distance. Jungle below, exotic birds. 3D Pixar style."
+            "image_prompt": "Pixar 3D style, panoramic wide shot from a rocky ridge. The character from the reference image, {outfit}, is standing at the edge pointing towards a magnificent smoking volcano in the misty distance. Prehistoric jungle stretches below, exotic birds with colorful feathers flying overhead, warm golden light, sense of adventure and discovery."
         },
         # SCENE 10: JUNGLE FEAST (NEW)
         {
@@ -95,7 +95,7 @@ DINO_THEME = {
             "type": "story",
             "is_preview": False,
             "text": "Hungrig vom Reiten, vom Fliegen und Gehen, gibt es nun Früchte, so groß und so schön. Die Dinos sie teilen, es schmeckt wunderbar, so ein Festmahl ist wirklich ganz rar.",
-            "image_prompt": "Pixar 3D style, group shot. The character from the reference image is sitting on a log with several small friendly dinosaurs, eating giant colorful glowing jungle fruits. Happy atmosphere, soft lighting. 3D Pixar style."
+            "image_prompt": "Pixar 3D style, warm group shot in a prehistoric clearing. The character from the reference image, {outfit}, is sitting on a fallen log surrounded by several friendly small dinosaurs of different colors. They share giant glowing jungle fruits. Soft dappled sunlight through leaves, happy communal atmosphere, detailed fruit textures."
         },
         # SCENE 11: SUNSET GOODBYE
         {
@@ -103,7 +103,7 @@ DINO_THEME = {
             "type": "story",
             "is_preview": False,
             "text": "Die Sonne geht unter, der Himmel wird rot, 'Ich muss jetzt heim zum Abendbrot!' Die Dinos winken, sie rufen 'Auf Wiedersehen', es war wirklich wunderschön.",
-            "image_prompt": "Pixar 3D style, sunset scene. The character from the reference image, {outfit}, is standing near a glowing portal, waving goodbye to a group of dinosaurs. Warm orange and purple lighting. 3D Pixar style."
+            "image_prompt": "Pixar 3D style, emotional sunset farewell scene. The character from the reference image, {outfit}, stands near a swirling golden magical portal, waving goodbye to a group of dinosaur friends. The sky is painted in warm orange, pink and purple hues. Dinosaurs look sad but happy, magical particles around the portal, bittersweet atmosphere."
         },
         # SCENE 12: BACK IN GARDEN
         {
@@ -111,7 +111,7 @@ DINO_THEME = {
             "type": "story",
             "is_preview": False,
             "text": "Der Wirbelwind bringt {name} zurück, genau in den Garten, was für ein Glück. Die Mama ruft: 'Essen ist bereit!', das war eine tolle Reise durch die Zeit.",
-            "image_prompt": "Pixar 3D style, the garden setting again, evening light. The character from the reference image is back in normal clothes, standing in the grass, dusting off pants. 3D Pixar style."
+            "image_prompt": "Pixar 3D style, peaceful garden scene in warm evening light. The character from the reference image is back in normal casual clothes, standing in familiar backyard grass, gently dusting off pants. A small green leaf stuck in hair, subtle smile on face. The sandbox visible in background, house lights glowing warmly, nostalgic atmosphere."
         },
         # SCENE 13: THE SOUVENIR
         {
