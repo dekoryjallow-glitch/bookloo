@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<img src="https://bookloo.xyz/assets/mascot/bear-waving.png" alt="Happy Bear" class="hero-image">
+
+<h1>Dein Abenteuer ist bereit! ✨</h1>
+
+<p>Hallo!</p>
+
+<p>
+    Wir haben tolle Neuigkeiten: Das personalisierte Buch <strong>{{ book_title }}</strong> wurde erfolgreich erstellt!
+    Der kleine Held kann sich jetzt auf 32 magische Seiten freuen.
+</p>
+
+<div style="margin: 30px 0;">
+    <a href="{{ action_url }}" class="btn">Jetzt ansehen</a>
+</div>
+
+<p style="font-size: 14px;">
+    Falls der Button nicht funktioniert, klicke hier:<br>
+    <a href="{{ action_url }}" style="color: #0066FF;">{{ action_url }}</a>
+</p>
+{% endblock %}

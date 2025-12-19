@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    container_name: storybook-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: storybook-backend
+    restart: always
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - REPLICATE_API_TOKEN=${REPLICATE_API_TOKEN}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - FIREBASE_CREDENTIALS_PATH=/app/service-account.json
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_PRICE_ID=${STRIPE_PRICE_ID}
+      - FRONTEND_URL=https://bookloo.xyz
+    volumes:
+      - ./backend/service-account.json:/app/service-account.json
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: storybook-frontend
+    restart: always
+    environment:
+      - NEXT_PUBLIC_API_URL=https://bookloo.xyz
+    depends_on:
+      - backend
+
+volumes:
+  caddy_data:
+  caddy_config:

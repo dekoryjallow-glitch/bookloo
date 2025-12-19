@@ -1,0 +1,21 @@
+{
+    "hosting": {
+        "public": "public",
+        "rewrites": [
+            {
+                "source": "/api/**",
+                "run": {
+                    "serviceId": "bookloo-backend",
+                    "region": "europe-west1"
+                }
+            },
+            {
+                "source": "**",
+                "run": {
+                    "serviceId": "bookloo",
+                    "region": "europe-west1"
+                }
+            }
+        ]
+    }
+}
