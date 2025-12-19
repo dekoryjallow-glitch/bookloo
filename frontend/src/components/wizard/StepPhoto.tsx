@@ -7,6 +7,7 @@
 import { useCallback, useState } from 'react';
 import { useWizardStore } from '@/lib/wizard-store';
 import { generateCharacterPreview } from '@/lib/api';
+import { resizeImage } from '@/lib/image-utils';
 
 export default function StepPhoto() {
     const {
@@ -23,40 +24,41 @@ export default function StepPhoto() {
     const [isGenerating, setIsGenerating] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const handleFileSelect = useCallback(async (file: File) => {
-        if (file && file.type.startsWith('image/')) {
-            // Local preview first
+    const handleFileSelect = useCallback(async (rawFile: File) => {
+        // Optimization: Resize and convert to JPEG on the client side
+        // This fixes HEIC issues and large file upload failures on mobile.
+        setIsGenerating(true);
+        setError(null);
+
+        try {
+            console.log("📐 Resizing image...");
+            const file = await resizeImage(rawFile, 1024, 1024, 0.8);
+
+            // Local preview
             const reader = new FileReader();
             reader.onloadend = () => {
                 setChildPhoto(file, reader.result as string);
             };
             reader.readAsDataURL(file);
 
-            // Trigger Generation IMMEDIATELY
-            setIsGenerating(true);
-            setError(null);
+            // Call API
+            console.log("🚀 Starting magic generation...");
+            const result = await generateCharacterPreview(file, childGender, childName || 'Kind');
 
-            try {
-                // Call API
-                console.log("🚀 Starting magic generation...");
-                const result = await generateCharacterPreview(file, childGender, childName || 'Kind');
+            // Save result
+            console.log("✅ Magic complete:", result);
+            setGeneratedPortrait(result.generated_url, result.original_url);
 
-                // Save result
-                console.log("✅ Magic complete:", result);
-                setGeneratedPortrait(result.generated_url, result.original_url);
-
-            } catch (err: any) {
-                console.error("Magic failed:", err);
-                const msg = err?.message || JSON.stringify(err);
-                if (msg.includes("500") || msg.includes("Failed")) {
-                    setError("Hoppla! Unsere KI ist gerade überlastet (Model Error). Bitte versuche es noch einmal.");
-                } else {
-                    setError("Das hat leider nicht geklappt. Bitte versuche ein anderes Foto.");
-                }
-                // We allow continuing with just the photo if needed, or force retry
-            } finally {
-                setIsGenerating(false);
+        } catch (err: any) {
+            console.error("Magic failed:", err);
+            const msg = err?.message || JSON.stringify(err);
+            if (msg.includes("500") || msg.includes("Failed")) {
+                setError("Hoppla! Unsere KI ist gerade überlastet (Model Error). Bitte versuche es noch einmal.");
+            } else {
+                setError("Das hat leider nicht geklappt. Bitte versuche ein anderes Foto.");
             }
+        } finally {
+            setIsGenerating(false);
         }
     }, [setChildPhoto, setGeneratedPortrait, childGender, childName]);
 

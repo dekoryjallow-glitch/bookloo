@@ -3,7 +3,16 @@
  * Functions to interact with the FastAPI backend
  */
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const getApiBase = () => {
+    if (typeof window !== 'undefined') {
+        // In browser, if env is missing, default to current origin
+        return process.env.NEXT_PUBLIC_API_URL || window.location.origin;
+    }
+    return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+};
+
+const API_BASE = getApiBase();
+
 
 export interface BookCreateResponse {
     id: string;
@@ -286,8 +295,7 @@ export async function createBook(
     if (customTheme) {
         formData.append('custom_theme', customTheme);
     }
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    const response = await fetch(API_BASE_URL + '/api/books/create', {
+    const response = await fetch(API_BASE + '/api/books/create', {
         method: 'POST',
         body: formData,
     });

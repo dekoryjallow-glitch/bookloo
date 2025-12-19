@@ -13,6 +13,10 @@ from dataclasses import dataclass
 from typing import Optional
 from PIL import Image
 from io import BytesIO
+import pillow_heif
+
+# Register HEIF opener for Pillow
+pillow_heif.register_heif_opener()
 
 from app.config import Settings
 from google import genai

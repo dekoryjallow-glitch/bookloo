@@ -10,6 +10,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
 from app.api.routes import books, health, assets, payment, webhook
 from app.services.firebase import initialize_firebase
+import pillow_heif
+
+# Register HEIF opener for Pillow (to support mobile iPhone uploads)
+pillow_heif.register_heif_opener()
 
 
 @asynccontextmanager
