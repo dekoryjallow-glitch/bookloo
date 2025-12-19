@@ -41,44 +41,52 @@ export default function Home() {
       </header>
 
       {/* --- Hero Section --- */}
-      <section className="relative pt-20 pb-32 px-6 overflow-hidden">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+      <section className="relative pt-20 pb-32 px-6 overflow-hidden text-center">
+        {/* Decorative Blurs */}
+        <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-100/50 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 -z-10"></div>
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-100/50 rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2 -z-10"></div>
 
-          {/* Text */}
-          <div className="z-10 order-2 md:order-1">
-            <div className="inline-block px-4 py-2 bg-orange-100 text-brand-orange font-bold rounded-full text-sm mb-6 animate-fade-in-up">
-              ✨ Neu: Jetzt mit Pixar-Quality AI
-            </div>
-            <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 leading-tight mb-6 animate-fade-in-up delay-100">
-              Dein Kind wird <br />
-              <span className="text-brand-blue">zum Helden</span>
-            </h1>
-            <p className="text-xl text-slate-500 mb-8 max-w-lg leading-relaxed animate-fade-in-up delay-200">
-              Personalisierte Kinderbücher mit echter KI-Magie. Erstelle in wenigen Minuten ein unvergessliches Geschenk.
-            </p>
+        <div className="max-w-4xl mx-auto flex flex-col items-center">
 
-            <div className="flex flex-col sm:flex-row gap-4 mb-12 animate-fade-in-up delay-300">
-              <Link href="/create" className="btn-primary text-lg px-10 py-4 shadow-blue-200">
-                Jetzt Buch erstellen
-              </Link>
-              <Link href="#how-it-works" className="btn-secondary text-lg px-10 py-4">
-                So funktioniert's
-              </Link>
-            </div>
-
-            <div className="flex items-center gap-2 text-sm font-bold text-slate-500 animate-fade-in-up delay-400">
-              <div className="flex text-yellow-400">★★★★★</div>
-              <span>4.9/5 von über 10.000 Eltern</span>
-            </div>
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-6 py-2 bg-white border border-blue-100 shadow-sm text-slate-600 font-medium rounded-full text-sm mb-8 animate-fade-in-up">
+            <span>🎄</span>
+            <span className="text-brand-blue font-bold">Weihnachts-Special:</span>
+            <span>Noch rechtzeitig lieferbar!</span>
           </div>
 
-          {/* Slider / Visual */}
-          <div className="relative order-1 md:order-2">
-            {/* Background Blob */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-100 rounded-full blur-3xl opacity-50 -z-10"></div>
+          {/* Headline */}
+          <h1 className="text-6xl md:text-8xl font-extrabold text-slate-900 leading-tight mb-6 animate-fade-in-up delay-100 tracking-tight">
+            Dein Kind wird <br />
+            <span className="text-brand-blue">zum Helden</span>
+          </h1>
 
-            {/* Comparison Slider */}
-            <div className="relative w-full aspect-[4/5] max-w-[500px] mx-auto shadow-2xl rounded-3xl overflow-hidden border-4 border-white transform rotate-2 hover:rotate-0 transition-transform duration-500">
+          {/* Subheadline */}
+          <p className="text-xl md:text-2xl text-slate-500 mb-10 max-w-2xl leading-relaxed animate-fade-in-up delay-200">
+            Personalisierte Kinderbücher mit echter KI-Magie ✨
+          </p>
+
+          {/* Buttons */}
+          <div className="flex flex-col sm:flex-row items-center gap-6 mb-8 animate-fade-in-up delay-300 z-10">
+            <Link href="/create" className="btn-primary text-xl px-12 py-5 shadow-blue-300 hover:shadow-blue-400 hover:-translate-y-1 transition-all">
+              Jetzt Buch erstellen →
+            </Link>
+            <Link href="#how-it-works" className="flex items-center gap-2 text-brand-blue font-bold hover:underline">
+              <span className="w-8 h-8 rounded-full border-2 border-brand-blue flex items-center justify-center pl-1">▶</span>
+              So funktioniert's
+            </Link>
+          </div>
+
+          {/* Social Proof */}
+          <div className="flex items-center gap-2 text-sm font-bold text-slate-500 mb-16 animate-fade-in-up delay-400">
+            <div className="flex text-yellow-400 text-lg">★★★★★</div>
+            <span>4.9 • 10.000+ glückliche Familien</span>
+          </div>
+
+          {/* Slider Container */}
+          <div className="relative w-full max-w-4xl mx-auto animate-fade-in-up delay-500">
+            {/* Slider Frame */}
+            <div className="relative aspect-[16/9] md:aspect-[2/1] w-full shadow-2xl shadow-blue-900/10 rounded-[2.5rem] overflow-hidden border-8 border-white bg-white">
               <ComparisonSlider
                 imageBefore="/assets/landing/slider-before.png"
                 imageAfter="/assets/landing/slider-after.png"
@@ -88,12 +96,21 @@ export default function Home() {
                 className="h-full"
               />
             </div>
-            {/* Decorative Elements */}
-            <div className="absolute -top-6 -right-6 bg-white p-4 rounded-2xl shadow-xl animate-bounce delay-700 hidden md:block">
-              <span className="text-4xl">✨</span>
+
+            {/* Mascot Peeking */}
+            <div className="absolute -bottom-12 -right-8 w-40 h-40 hidden md:block rotate-12 animate-float">
+              <div className="relative w-full h-full">
+                <span className="text-9xl absolute bottom-0 right-0 drop-shadow-xl">🐻</span>
+                {/* Small book icon */}
+                <span className="text-5xl absolute bottom-0 left-0">📖</span>
+              </div>
             </div>
-            <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl animate-bounce delay-1000 hidden md:block">
-              <span className="text-4xl">🪄</span>
+
+            {/* Play Button Overlay (Optional - center of video feel) */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+              <div className="w-20 h-20 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/50">
+                <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1"></div>
+              </div>
             </div>
           </div>
 
