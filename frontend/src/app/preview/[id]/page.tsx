@@ -40,6 +40,18 @@ export default function PreviewPage() {
     const [loading, setLoading] = useState(true);
     const [purchasing, setPurchasing] = useState(false);
     const [selectedImage, setSelectedImage] = useState<number>(0);
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+
+    const openLightbox = (imageUrl: string) => {
+        setLightboxImage(imageUrl);
+        setLightboxOpen(true);
+    };
+
+    const closeLightbox = () => {
+        setLightboxOpen(false);
+        setLightboxImage(null);
+    };
 
     const openModal = () => {
         const modal = document.getElementById('cta-modal') as HTMLDialogElement;
@@ -161,23 +173,26 @@ export default function PreviewPage() {
                     {/* Preview Gallery (Left 3/4) */}
                     <div className="lg:col-span-3 space-y-8">
                         {/* 4 Multi-Preview Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {[0, 1, 7, 13].map((sceneId, idx) => {
                                 const sceneData = book.preview_scenes?.find(s => s.scene_id === sceneId);
                                 const mapIndex = [0, 1, 7, 13].indexOf(sceneId);
                                 const imageUrl = sceneData?.image_url || (mapIndex !== -1 ? previewImages[mapIndex] : null);
 
                                 return (
-                                    <div key={sceneId} className="space-y-3">
-                                        <div className="bg-white p-3 rounded-3xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow cursor-pointer group" onClick={() => {
-                                            if (imageUrl) setSelectedImage(mapIndex);
-                                        }}>
-                                            <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-gray-50 relative">
+                                    <div key={sceneId} className="space-y-2">
+                                        <div
+                                            className="bg-white p-2 rounded-2xl shadow-lg border border-gray-100 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 cursor-pointer group relative"
+                                            onClick={() => {
+                                                if (imageUrl) openLightbox(imageUrl);
+                                            }}
+                                        >
+                                            <div className="aspect-[3/4] rounded-xl overflow-hidden bg-gray-50 relative">
                                                 {imageUrl ? (
                                                     <img
                                                         src={imageUrl}
                                                         alt={`Preview Scene ${sceneId}`}
-                                                        className="w-full h-full object-contain"
+                                                        className="w-full h-full object-cover"
                                                     />
                                                 ) : (
                                                     <div className="w-full h-full flex flex-col items-center justify-center space-y-2">
@@ -186,8 +201,19 @@ export default function PreviewPage() {
                                                     </div>
                                                 )}
 
+                                                {/* Zoom Overlay on Hover */}
+                                                {imageUrl && (
+                                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center">
+                                                        <div className="w-12 h-12 rounded-full bg-white/90 shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100">
+                                                            <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                )}
+
                                                 {/* Badge */}
-                                                <div className="absolute top-3 left-3 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full shadow-sm text-[10px] font-bold uppercase tracking-wider text-purple-600 border border-purple-100">
+                                                <div className="absolute top-2 left-2 px-2 py-1 bg-white/95 backdrop-blur-sm rounded-full shadow-sm text-[10px] font-bold uppercase tracking-wider text-purple-600 border border-purple-100">
                                                     {sceneId === 0 ? '📕 Buch-Cover' : `📖 Seite ${sceneId * 2}`}
                                                 </div>
                                             </div>
@@ -306,6 +332,41 @@ export default function PreviewPage() {
                     </div>
                 </div>
             </dialog>
+
+            {/* Lightbox Modal for Full-Size Image */}
+            {lightboxOpen && lightboxImage && (
+                <div
+                    className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 animate-fadeIn"
+                    onClick={closeLightbox}
+                >
+                    {/* Close Button */}
+                    <button
+                        onClick={closeLightbox}
+                        className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+                    >
+                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+
+                    {/* Full Size Image */}
+                    <div
+                        className="max-w-4xl max-h-[90vh] rounded-2xl overflow-hidden shadow-2xl"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <img
+                            src={lightboxImage}
+                            alt="Full size preview"
+                            className="w-full h-full object-contain"
+                        />
+                    </div>
+
+                    {/* Hint */}
+                    <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/60 text-sm">
+                        Klicke irgendwo, um zu schließen
+                    </p>
+                </div>
+            )}
         </main>
     );
 }
