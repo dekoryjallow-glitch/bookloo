@@ -12,6 +12,11 @@ export const metadata: Metadata = {
   title: "bookloo - Dein Kind als Buch-Held",
   description: "Erstelle magische, personalisierte Kinderbücher mit deinem Kind als Helden. KI-gestützte Geschichten und wunderschöne Illustrationen.",
   keywords: ["Kinderbuch", "personalisiert", "KI Buch", "bookloo"],
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
