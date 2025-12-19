@@ -232,7 +232,7 @@ export default function LoadingScreen({ status }: LoadingScreenProps) {
                                             <motion.div
                                                 initial={{ scale: 0 }}
                                                 animate={{ scale: 1 }}
-                                                delay={0.2}
+                                                transition={{ delay: 0.2 }}
                                                 className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs border-2 border-white shadow-sm"
                                             >
                                                 ✓

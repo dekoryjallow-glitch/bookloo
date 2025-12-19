@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Storybook.ai - API Client
  * Functions to interact with the FastAPI backend
  */
@@ -72,7 +72,7 @@ export async function generateCharacterPreview(
     formData.append('name', name);
 
     const url = `${API_BASE}/api/assets/generate-character-preview`;
-    console.log('🚀 Generating character preview:', url);
+    console.log('ðŸš€ Generating character preview:', url);
 
     const response = await fetch(url, {
         method: 'POST',
@@ -127,7 +127,7 @@ export async function uploadImage(file: File): Promise<string> {
  */
 export async function initBook(payload: InitBookPayload): Promise<BookCreateResponse> {
     const url = `${API_BASE}/api/books/init`;
-    console.log('🚀 Initializing book:', payload);
+    console.log('ðŸš€ Initializing book:', payload);
 
     try {
         const response = await fetch(url, {
@@ -140,13 +140,13 @@ export async function initBook(payload: InitBookPayload): Promise<BookCreateResp
 
         if (!response.ok) {
             const errorText = await response.text();
-            console.error('❌ Init failed:', errorText);
+            console.error('âŒ Init failed:', errorText);
             throw new Error(`Failed to init book: ${errorText}`);
         }
 
         return response.json();
     } catch (error) {
-        console.error('❌ Fetch error:', error);
+        console.error('âŒ Fetch error:', error);
         throw error;
     }
 }
@@ -172,7 +172,7 @@ export async function getMyBooks(userId: string): Promise<BookDetails[]> {
 
     if (!response.ok) {
         // Fallback for demo or if endpoint doesn't exist yet
-        console.warn('❌ Failed to fetch user books, using empty list');
+        console.warn('âŒ Failed to fetch user books, using empty list');
         return [];
     }
 
@@ -266,5 +266,33 @@ export async function createCheckoutSession(bookId: string): Promise<{ checkout_
         throw new Error(`Failed to create checkout session: ${response.statusText}`);
     }
 
+    return response.json();
+}
+/**
+ * Create a new book
+ */
+export async function createBook(
+    childName: string,
+    theme: string,
+    photo?: File,
+    customTheme?: string
+): Promise<{ id: string }> {
+    const formData = new FormData();
+    formData.append('child_name', childName);
+    formData.append('theme', theme);
+    if (photo) {
+        formData.append('photo', photo);
+    }
+    if (customTheme) {
+        formData.append('custom_theme', customTheme);
+    }
+    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    const response = await fetch(API_BASE_URL + '/api/books/create', {
+        method: 'POST',
+        body: formData,
+    });
+    if (!response.ok) {
+        throw new Error('Failed to create book: ' + response.statusText);
+    }
     return response.json();
 }

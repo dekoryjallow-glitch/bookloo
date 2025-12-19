@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 /**
  * Storybook.ai - Wizard Store
@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export type Gender = 'boy' | 'girl' | 'neutral';
 export type Theme = 'space' | 'dinos' | 'princess' | 'pirates' | 'underwater' | 'magic' | 'custom';
-export type Style = 'pixar_3d';
+export type Style = 'pixar_3d' | 'watercolor' | 'pencil';
 
 export interface WizardState {
     // Session
@@ -152,3 +152,4 @@ export const useWizardStore = create<WizardState>()((set, get) => ({
         }
     },
 }));
+
