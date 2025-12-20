@@ -29,10 +29,10 @@ class AIMockupEngineV3:
     
     # Mockup templates for each scene type
     TEMPLATES = {
-        0: "cover_template.jpg",      # Cover scene -> closed book
+        0: "cover_template_v2.jpg",   # Cover scene -> closed book (User provided)
         1: "open_book_nursery.png",   # Scene 1 -> nursery setting
-        5: "open_book_carpet.png",    # Scene 2 -> carpet setting  
-        10: "open_book_clean.png",    # Scene 3 -> clean background
+        7: "open_book_carpet.png",    # Scene 7 -> carpet setting  
+        13: "open_book_clean.png",    # Scene 13 -> clean background
     }
     
     # Cover style references for different themes
@@ -46,6 +46,13 @@ class AIMockupEngineV3:
         "default": "forest.jpg",
     }
     
+    # Inside page style references (nursery, carpet, clean)
+    INSIDE_STYLE_REFS = {
+        "nursery": "https://storage.googleapis.com/bookloo-assets/style_refs/inside_nursery_ref.jpg",
+        "carpet": "https://storage.googleapis.com/bookloo-assets/style_refs/inside_carpet_ref.jpg",
+        "clean": "https://storage.googleapis.com/bookloo-assets/style_refs/inside_clean_ref.jpg",
+    }
+    
     def __init__(self, settings: Optional[Settings] = None):
         self.settings = settings or get_settings()
         self.api_key = self.settings.gemini_api_key
@@ -57,168 +64,131 @@ class AIMockupEngineV3:
         if ref_path.exists():
             return Image.open(ref_path)
         return None
-    
-    def _get_cover_prompt(self, book_title: str = "", child_name: str = "") -> str:
-        """Detailed prompt for cover mockup generation with style references."""
-        title_text = book_title if book_title else f"{child_name}s Abenteuer"
         
-        return f"""Create a beautiful children's book cover in the EXACT SAME STYLE as the reference cover image (third image).
+    def _get_style_ref_by_name(self, name: str) -> Optional[str]:
+        """Get the URL for an inside page style reference."""
+        return self.INSIDE_STYLE_REFS.get(name)
+    
+    def _get_cover_prompt(self, theme: str = "", book_title: str = "", child_name: str = "") -> str:
+        """Professional product photography prompt for CLOSED BOOK with Title and immersive surroundings."""
+        title_to_print = book_title or f"{child_name}s Abenteuer" if child_name else "Ein großes Abenteuer"
+        return f"""ROLE: Professional Product Designer & Commercial Photographer
+TASK: Design and photograph a personalized CLOSED HARDCOVER BOOK.
 
-You are provided with:
-1. The mockup template (closed hardcover book on wooden floor) - FIRST image
-2. The scene illustration with the personalized character - SECOND image  
-3. A STYLE REFERENCE cover showing the exact design style to follow - THIRD image
+INPUTS:
+- Image 1 (Template): A physical CLOSED white book on a wooden table.
+- Image 2 (Artwork): High-resolution cover illustration.
 
-YOUR TASK: Create a new cover that:
-- Uses the EXACT CHILD CHARACTER FACE from the FOURTH image (portrait reference) and the SCENE ELEMENTS from the second image. 
-- The face must be perfectly consistent with the child in the fourth image.
-- Follows the EXACT DESIGN STYLE (typography, layout, colors) of the third reference image.
-- Gets placed onto the book mockup from the first image.
+EXECUTION:
+1. TYPOGRAPHY (MANDATORY - TOP PRIORITY): 
+   - Print the exact title "{title_to_print}" on the front cover.
+   - POSITION: Top-center or Center, beautifully integrated into the artwork.
+   - STYLE: Large, bold, readable children's book display font.
+   - EFFECT: The text MUST look printed/embossed onto the physical book cover. 
+   - NO PLACEHOLDERS: Ensure the actual name "{child_name}" is visible if it's part of the title.
+2. ARTWORK APPLICATION:
+   - Wrap Artwork (Image 2) edge-to-edge (FULL BLEED) onto the book in Image 1.
+   - PERSPECTIVE: Match the 3D angle and volume of the book perfectly.
+3. BLENDING: Maintain the realistic wooden table background and natural shadows.
 
-CRITICAL STYLE REQUIREMENTS:
-NO BRANDING:
-- DO NOT add any logo, "bookloo" or "Storybook.ai" text to the cover.
-- The entire cover should be free of any company branding, logos, or platform names.
-- Even if the reference image (image 3) has a logo, DO NOT copy it.
+STRICT CONSTRAINTS:
+- YOU MUST PRINT THE TEXT "{title_to_print}" ON THE BOOK.
+- THE BOOK MUST REMAIN CLOSED.
+- NO WHITE MARGINS on the cover face.
 
-TITLE DESIGN:
-- Title: "{title_text}"
-- Font: Warm golden/cream color with subtle dark outline (matches reference)
-- Position: Top area of cover, very large, bold and prominent
-- Style: Playful, child-friendly typography
-
-ILLUSTRATION STYLE:
-- 3D Pixar/Disney-quality character rendering
-- Rich, vibrant, magical color palette
-- The child character must be the central focus
-- Magical/adventure elements matching the theme
-- Dreamy, fantastical background with depth
-
-OUTPUT: A complete book cover design on the mockup template, matching the premium quality and style of the reference image (without any logos or branding), featuring the personalized character."""
+OUTPUT: Ultra-high-end photorealistic result."""
 
     def _get_nursery_book_prompt(self, story_text: str = "") -> str:
-        """Prompt for open book with toys in background (Scene 1)."""
+        """Professional prompt for OPEN BOOK in NURSERY with AGGRESSIVE Full Bleed."""
         left_page_section = self._get_left_page_section(story_text)
-        
-        return f"""Integrate the scene illustration onto the right page of an open children's book mockup with toys in the background.
+    def _get_nursery_book_prompt(self, story_text: str = "") -> str:
+        """Professional prompt for OPEN BOOK in NURSERY with AGGRESSIVE Full Bleed."""
+        left_page_section = self._get_left_page_section(story_text)
+        return f"""ROLE: Professional Product Photographer
+TASK: Create a PHOTOREALISTIC PHOTO of an open children's book on a wooden table in a nursery.
 
-You are provided with:
-1. An open blank book mockup with colorful toys blurred in the background - this is the first image
-2. A Pixar-style scene illustration (AI-generated, square format) - this is the second image
+INPUTS:
+- Image 1 (Template): Photo of an open book in a nursery.
+- Image 2 (Artwork): Illustration to be "printed" on the right page.
 
-Your task: Seamlessly place the scene illustration on the RIGHT PAGE of the open book.
-
-REQUIREMENTS:
-
-Page Integration:
-- Place the illustration on the right page only
-- Match the page's perspective (book is lying flat, slight viewing angle from above)
-- Apply realistic paper texture to make illustration look printed on the page
-- Respect the natural page curve near the spine binding
-- Ensure illustration fits within page margins (small white border around edges)
-
-Lighting & Shadows:
-- Match the warm children's room lighting from the mockup
-- Add subtle shadows from page curvature onto the illustration
-- Apply soft lighting consistent with the toy room ambiance
-- Maintain the bokeh effect of the toy-filled background (keep it blurred)
-
-Physical Accuracy:
-- Simulate how ink looks on book paper (slight matte finish)
-- Add paper grain texture overlay
-- Respect the book's binding shadow running down the center
-- Maintain all original background elements (toys, wooden floor, lighting)
-
-Depth & Realism:
-- The illustration should look flat on the page (not floating)
-- Add subtle depth where the page meets the spine
-- Apply realistic color bleeding (ink on paper effect)
-- Ensure sharp focus on the book, blurred toys in background
+EXECUTION:
+1. "PRINT" Image 2 onto the RIGHT PAGE of the book in Image 1.
+   - FULL BLEED: The illustration must fill the ENTIRE right page, from the binding to the edges. NO WHITE BORDERS.
+   - TEXTURE: The image must look like it is ink on paper. Match the paper grain, curve, and lighting of the real book.
+   - SHADOWS: Preserve the shadow in the center fold (gutter) so it looks 3D.
+2. TYPESETTING (Left Page):
+   - "Print" the text content onto the LEFT PAGE.
+   - Use a readable serif font (like 'Andika' or 'Garamond').
+   - Text should follow the slight curve of the page.
 {left_page_section}
-OUTPUT: A photorealistic composite showing the scene illustration printed on the right page of an open children's book, with story text on the left page, and toys visible but blurred in the background."""
+LIGHTING: Soft, warm, cozy nursery lighting with bokeh in the background.
+
+OUTPUT: A high-resolution PHOTO of the physical book. NOT a flat digital image."""
 
     def _get_carpet_book_prompt(self, story_text: str = "") -> str:
-        """Prompt for open book on carpet (Scene 5)."""
+        """Professional prompt for OPEN BOOK on CARPET with AGGRESSIVE Full Bleed."""
         left_page_section = self._get_left_page_section(story_text)
-        
-        return f"""Integrate the scene illustration onto the right page of an open children's book mockup lying on a cozy carpet.
+    def _get_carpet_book_prompt(self, story_text: str = "") -> str:
+        """Professional prompt for OPEN BOOK on CARPET with AGGRESSIVE Full Bleed."""
+        left_page_section = self._get_left_page_section(story_text)
+        return f"""ROLE: Lifestyle Photographer
+TASK: Create a COZY OVERHEAD PHOTO of an open book lying on a textured carpet.
 
-You are provided with:
-1. An open blank book mockup on a textured carpet/rug with warm lighting - this is the first image
-2. A Pixar-style scene illustration (AI-generated) - this is the second image
+INPUTS:
+- Image 1 (Template): Open book on a rug/carpet.
+- Image 2 (Artwork): Illustration.
 
-Your task: Seamlessly place the scene illustration on the RIGHT PAGE of the open book.
-
-REQUIREMENTS:
-
-Page Integration:
-- Place the illustration on the right page only
-- Match the page's perspective and natural curve
-- Apply realistic paper texture
-- Respect the book's binding and page margins
-
-Lighting & Shadows:
-- Match the warm, cozy lighting from the carpet setting
-- Add natural shadows from page curvature
-- Maintain the soft ambient lighting of the scene
-
-Physical Accuracy:
-- Simulate printed ink on book paper
-- Keep the carpet texture visible and unchanged
-- Maintain the book's natural appearance on the soft surface
+EXECUTION:
+1. RIGHT PAGE INTEGRATION:
+   - "Print" Image 2 onto the RIGHT PAGE.
+   - FULL BLEED: Edge-to-edge coverage. The illustration must vanish into the binding fold.
+   - REALISM: The image must interact with the paper texture and lighting. It should look like a printed page, not an overlay.
+2. LEFT PAGE TEXT:
+   - "Print" the text content clearly on the LEFT PAGE.
+   - Ensure high contrast and readability.
 {left_page_section}
-OUTPUT: A photorealistic composite showing the scene illustration printed on the right page of an open book lying on a carpet, with story text on the left page."""
+LIGHTING: Warm, ambient indoor light. The paper should look slightly off-white/cream.
+
+OUTPUT: A photorealistic lifestyle shot."""
 
     def _get_clean_book_prompt(self, story_text: str = "") -> str:
-        """Prompt for open book with clean background (Scene 10)."""
+        """Professional prompt for OPEN BOOK with CLEAN background and AGGRESSIVE Full Bleed."""
         left_page_section = self._get_left_page_section(story_text)
-        
-        return f"""Integrate the scene illustration onto the right page of an open children's book mockup with a clean white background.
+    def _get_clean_book_prompt(self, story_text: str = "") -> str:
+        """Professional prompt for OPEN BOOK with CLEAN background and AGGRESSIVE Full Bleed."""
+        left_page_section = self._get_left_page_section(story_text)
+        return f"""ROLE: Commercial Product Photographer
+TASK: Create a STUDIO PRO SHOT of an open book on a clean white surface.
 
-You are provided with:
-1. An open blank book mockup with a minimal, clean white background - this is the first image
-2. A Pixar-style scene illustration (AI-generated) - this is the second image
+INPUTS:
+- Image 1 (Template): Open book on white/grey studio background.
+- Image 2 (Artwork): Illustration.
 
-Your task: Seamlessly place the scene illustration on the RIGHT PAGE of the open book.
-
-REQUIREMENTS:
-
-Page Integration:
-- Place the illustration on the right page only
-- Match the page's perspective perfectly
-- Apply realistic paper texture
-- Respect the book's straight-on viewing angle
-
-Lighting & Shadows:
-- Match the even, studio-style lighting
-- Add subtle shadows in the binding area
-- Maintain clean, professional product photography look
-
-Physical Accuracy:
-- Simulate high-quality book printing
-- Keep the clean white background pristine
-- Show the book's thickness and binding clearly
+EXECUTION:
+1. PAGE COMPOSITION (Right Page):
+   - Apply Image 2 to the RIGHT PAGE.
+   - FULL BLEED: No margins. The image must go all the way to the edge.
+   - PERSPECTIVE: Warp the image to match the book's 3D geometry perfectly.
+   - SHADING: The center fold (gutter) must have a realistic shadow.
+2. TYPOGRAPHY (Left Page):
+   - professionally typeset the text on the LEFT PAGE.
+   - Center alignment or justified.
 {left_page_section}
-OUTPUT: A photorealistic composite showing the scene illustration printed on the right page of an open book with a clean, minimal background, and story text on the left page."""
+LIGHTING: Bright, clean studio lighting. Soft shadows.
+
+OUTPUT: A clean, commercial photorealistic book mockup."""
 
     def _get_left_page_section(self, story_text: str) -> str:
-        """Generate the left page text section for open book prompts."""
+        """Professional typography requirements for the left page."""
         if not story_text:
             return ""
-        
         return f"""
-LEFT PAGE (Text Page):
-Display this story text matching to the picture: "{story_text}"
-
-Formatting rules:
-- Font: Child-friendly sans-serif (Andika/Comic Sans style)
-- Font size: 18-22pt (readable for parents)
-- Text color: Warm dark gray (#3A3A3A)
-- Alignment: Left-aligned, 2-3cm margins
-- Line spacing: 1.5x - 2x (generous)
-- Text must look PRINTED on paper (not floating)
-- Apply subtle paper texture beneath text
-- No text cutoff or distortion
+TYPOGRAPHY REQUIREMENTS (LEFT PAGE):
+- TEXT CONTENT: "{story_text}"
+- STYLE: Elegant, readable children's book typeface.
+- PLACEMENT: Centered or slightly towards the outer margin.
+- EFFECT: Text must follow the page's 3D warp and paper texture. No digital overlay look.
+- CONTRAST: Ensure high readability against the paper color.
 """
     
     async def create_mockup(
@@ -255,10 +225,10 @@ Formatting rules:
             print(f"   ⚠️ Template not found: {template_path}")
             return None
             
-        print(f"   📖 Creating AI mockup for scene {scene_number} using {template_name}...")
+        print(f"🔍 DEBUG Mockup Engine: scene_number={scene_number}, template={template_name}")
         
         try:
-            # Download the scene image
+            # 1. Download Scene/Cover Artwork
             async with httpx.AsyncClient(timeout=60.0) as client:
                 resp = await client.get(scene_image_url)
                 if resp.status_code != 200:
@@ -266,42 +236,48 @@ Formatting rules:
                     return None
                 scene_bytes = resp.content
                 
-            # Load images
+            # 2. Load Images
             template_image = Image.open(template_path)
             scene_image = Image.open(BytesIO(scene_bytes))
             
-            # For cover: load style reference image and optional character reference
+            # 3. Handle Style References (Download if URL)
             style_ref_image = None
-            char_ref_image = None
-            if scene_number == 0:
-                style_ref_image = self._get_cover_style_ref(theme or "default")
-                if style_ref_image:
-                    print(f"   🎨 Using style reference for theme: {theme or 'default'}")
+            if scene_number > 0:
+                style_ref_name = "nursery" if template_name == "open_book_nursery.png" else \
+                                 "carpet" if template_name == "open_book_carpet.png" else "clean"
+                style_ref_url = self._get_style_ref_by_name(style_ref_name)
                 
-                if character_reference_url:
-                    print(f"   👤 Using character reference portrait for cover...")
+                if style_ref_url:
+                    print(f"   🎨 Downloading style reference: {style_ref_name}")
                     async with httpx.AsyncClient(timeout=30.0) as client:
-                        cref_resp = await client.get(character_reference_url)
-                        if cref_resp.status_code == 200:
-                            char_ref_image = Image.open(BytesIO(cref_resp.content))
+                        s_resp = await client.get(style_ref_url)
+                        if s_resp.status_code == 200:
+                            style_ref_image = Image.open(BytesIO(s_resp.content))
             
-            # Select appropriate prompt based on scene/template
+            # 4. Determine Prompt & Style Reference
             if scene_number == 0:
-                prompt = self._get_cover_prompt(book_title or "", child_name or "")
+                print(f"   📘 Using CLOSED BOOK cover logic for theme: {theme}")
+                print(f"   ✍️ Printing Title: {book_title} (for {child_name})")
+                prompt = self._get_cover_prompt(theme or "", book_title, child_name)
+                # DISABLE style reference for cover as it might confuse Gemini regarding the name/title
+                style_ref_image = None
             elif template_name == "open_book_nursery.png":
+                print("   📖 Using OPEN BOOK (Nursery) logic")
                 prompt = self._get_nursery_book_prompt(story_text or "")
             elif template_name == "open_book_carpet.png":
+                print("   📖 Using OPEN BOOK (Carpet) logic")
                 prompt = self._get_carpet_book_prompt(story_text or "")
             else:
+                print("   📖 Using OPEN BOOK (Clean) logic")
                 prompt = self._get_clean_book_prompt(story_text or "")
             
-            # Generate mockup with AI
+            # 5. Generate Mockup
             mockup_bytes = await self._call_gemini(
                 template_image, 
                 scene_image, 
                 prompt,
                 style_ref=style_ref_image,
-                char_ref=char_ref_image
+                char_ref=None # Keeps it focused
             )
             
             return mockup_bytes

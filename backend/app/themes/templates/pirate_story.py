@@ -16,7 +16,7 @@ PIRATE_THEME = {
             "type": "cover",
             "is_preview": True,
             "text": "Kapitän {name} und der Insel-Schatz",
-            "image_prompt": f"Epic cinematic portrait of the character from the reference image, who is a {{character_desc}}, {{outfit}}, standing heroically on the deck of a grand pirate ship. Expressive adventure spirit in sparkling eyes. White sails billowing, tropical islands in background. Golden hour dramatic lighting. {QUALITY_BOOSTER}"
+            "image_prompt": f"Masterpiece cinematic heroic portrait of the character from the reference image, who is a {{character_desc}}, {{outfit}}, standing proudly on the bow of a magnificent pirate galleon. Wind blowing through hair, bright adventurous eyes. Background: Tropical turquoise ocean, exotic islands with palm trees, and a glorious golden sunset sky. {QUALITY_BOOSTER}"
         },
         # SCENE 1: BATHTUB/PLAYING (INTRO)
         {
@@ -120,7 +120,7 @@ PIRATE_THEME = {
             "type": "story",
             "is_preview": True,
             "text": "In der Hand eine Goldmünze, glänzend und schwer, morgen fahren wir wieder hinaus auf das Meer. {name} lächelt im Schlaf ganz versunken und froh, Abenteuer enden genau ebenso.",
-            "image_prompt": "Pixar 3D style, extreme close-up on the character's hand holding a single gold pirate coin under the moonlight. Peaceful sleeping expression. 3D Pixar style."
+            "image_prompt": f"Magical Pixar 3D style, intimate extreme close-up. The character from the reference image, {{character_desc}}, is sleeping peacefully in a cozy bed. Their hand is holding a large, magical glowing gold pirate coin that casts a warm, golden ethereal glow onto their smiling face. Sparkling light particles, soft moonlight from a window, cinematic bokeh. {QUALITY_BOOSTER}"
         }
     ]
 }

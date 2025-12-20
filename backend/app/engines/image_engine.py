@@ -240,8 +240,9 @@ class ImageEngine:
                 f"Got: {character_asset_url}"
             )
         
-        # Inject quality boost into prompt
-        enhanced_prompt = f"{cover_prompt} {self.COVER_QUALITY_BOOST}"
+        # Inject quality boost and background replacement instruction
+        bg_instruction = "CRITICAL: Replace the clean white background from the reference image with the environment described in the prompt. "
+        enhanced_prompt = f"{bg_instruction} {cover_prompt} {self.COVER_QUALITY_BOOST}"
         
         print(f"🎨 Generating COVER image...")
         print(f"   📝 Enhanced Prompt: {enhanced_prompt[:100]}...")
@@ -256,8 +257,8 @@ class ImageEngine:
                     input={
                         "prompt": enhanced_prompt,
                         "img_cond_path": character_asset_url,
-                        "guidance": 2.0,  # Lower = more faithful to reference face
-                        "speed_mode": "High Quality",  # Max quality for cover
+                        "guidance": 3.5,  # Increased to allow background replacement
+                        "speed_mode": "Real Time",
                     }
                 )
                 result_url = self._extract_url(output)
