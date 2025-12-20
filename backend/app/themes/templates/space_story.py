@@ -19,7 +19,7 @@ SPACE_TEMPLATE = {
             "type": "cover",
             "is_preview": True,
             "text": "{name} greift nach den Sternen",
-            "image_prompt": f"Epic cinematic close-up portrait of the character from the reference image, who is a {{character_desc}}, floating in deep space. Expressive wonder in sparkling eyes. Background: detailed purple galaxy nebula with swirling cosmic dust. Rim lighting on the suit, volumetric star glow. {QUALITY_BOOSTER}"
+            "image_prompt": f"Masterpiece cinematic close-up heroic portrait of the character from the reference image, who is a {{character_desc}}. The character looks brave and curious, wearing a sleek futuristic orange astronaut suit with glowing blue accents. Floating majestically in a deep space void. Background: A breathtaking, vibrant purple and gold cosmic nebula with swirling star dust, distant galaxies, and sparkling constellations. Volumetric cosmic lighting, rim light highlighting the character's silhouette, hyper-detailed textures, 8k resolution. {QUALITY_BOOSTER}"
         },
         # SCENE 1: BEDROOM (INTRO)
         {
@@ -27,7 +27,7 @@ SPACE_TEMPLATE = {
             "type": "story",
             "is_preview": True,
             "text": "In einem Zimmer, gemütlich und klein, träumt {name} davon, im Weltall zu sein. 'Die Sterne funkeln so hell und klar, ich wünschte', sagt {name}, 'ich wäre schon da!'",
-            "image_prompt": "Wide shot of the character from the reference image sitting in a cozy children's bedroom at night. The character is looking through a telescope out the window at the starry sky. Toys on the floor, warm lamp lighting inside, blue moonlight outside. 3D Pixar animation style."
+            "image_prompt": "Whimsical wide shot of the character from the reference image, a {character_desc}, sitting on a cozy bed in a child's bedroom at night. The character is looking through a gleaming brass telescope out of a large circular window at a spectacular starry night sky. The room is filled with star-themed toys and glowing planet models. Soft warm lamp light clashes with cool blue moonlight. Magical atmosphere, particles of light floating in the air, 3D Pixar animation style."
         },
         # SCENE 2: LAUNCH
         {

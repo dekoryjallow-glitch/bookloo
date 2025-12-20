@@ -165,54 +165,56 @@ export default function CreatePage() {
                     {renderStep()}
                 </div>
 
-                {/* Navigation Buttons */}
-                <div className="flex justify-between gap-4">
-                    {currentStep > 1 ? (
-                        <button
-                            onClick={prevStep}
-                            disabled={isSubmitting}
-                            className="btn-secondary group/nav"
-                        >
-                            <svg className="w-5 h-5 transition-transform duration-300 group-hover/nav:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-                            </svg>
-                            <span>Zurück</span>
-                        </button>
-                    ) : (
-                        <div />
-                    )}
-
-                    <button
-                        onClick={handleNext}
-                        disabled={!isStepValid(currentStep) || isSubmitting}
-                        className={`
-                            btn-primary group/nav
-                            ${(!isStepValid(currentStep) || isSubmitting) ? 'opacity-50 cursor-not-allowed !shadow-none' : ''}
-                        `}
-                    >
-                        {currentStep === steps.length ? (
-                            <>
-                                {isSubmitting ? (
-                                    <span>⏳ Generiere...</span>
-                                ) : (
-                                    <>
-                                        <span>✨ Magie starten</span>
-                                        <svg className="w-5 h-5 transition-transform duration-300 group-hover/nav:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                        </svg>
-                                    </>
-                                )}
-                            </>
-                        ) : (
-                            <>
-                                <span>Weiter</span>
-                                <svg className="w-5 h-5 transition-transform duration-300 group-hover/nav:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                {/* Navigation Buttons - Hide on Step 2 (Photo) as it has internal navigation */}
+                {currentStep !== 2 && (
+                    <div className="flex justify-between gap-4">
+                        {currentStep > 1 ? (
+                            <button
+                                onClick={prevStep}
+                                disabled={isSubmitting}
+                                className="btn-secondary group/nav"
+                            >
+                                <svg className="w-5 h-5 transition-transform duration-300 group-hover/nav:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
                                 </svg>
-                            </>
+                                <span>Zurück</span>
+                            </button>
+                        ) : (
+                            <div />
                         )}
-                    </button>
-                </div>
+
+                        <button
+                            onClick={handleNext}
+                            disabled={!isStepValid(currentStep) || isSubmitting}
+                            className={`
+                                btn-primary group/nav
+                                ${(!isStepValid(currentStep) || isSubmitting) ? 'opacity-50 cursor-not-allowed !shadow-none' : ''}
+                            `}
+                        >
+                            {currentStep === steps.length ? (
+                                <>
+                                    {isSubmitting ? (
+                                        <span>⏳ Generiere...</span>
+                                    ) : (
+                                        <>
+                                            <span>✨ Magie starten</span>
+                                            <svg className="w-5 h-5 transition-transform duration-300 group-hover/nav:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                            </svg>
+                                        </>
+                                    )}
+                                </>
+                            ) : (
+                                <>
+                                    <span>Weiter</span>
+                                    <svg className="w-5 h-5 transition-transform duration-300 group-hover/nav:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </>
+                            )}
+                        </button>
+                    </div>
+                )}
             </div>
         </main>
     );

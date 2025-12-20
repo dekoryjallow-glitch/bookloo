@@ -18,10 +18,9 @@ async def generate_character_preview(
     name: str = Form(...),
 ):
     """
-    Generate a single character portrait preview from an uploaded photo.
-    This uses nano-banana-pro (Gemini) for fast, high-quality generation.
-    Returns public URLs for both the original upload and the generated result.
+    Generate a single character preview.
     """
+    print(f"🚀 Received request for {name}", flush=True)
     import uuid
     from app.services.firebase import StorageService
     

@@ -211,6 +211,12 @@ async def generate_preview_task(
         print(f"   [Step 3/4] Initializing Image Engine...")
         image_engine = ImageEngineWithRetry(settings)
         
+        # DEBUG: Log prompts
+        print(f"🔍 DEBUG: Story Scenes found: {[s.scene_number for s in story.scenes]}")
+        for s in story.scenes:
+            if s.scene_number in KEY_SCENES:
+                print(f"🔍 DEBUG: Scene {s.scene_number} Prompt: {s.image_prompt[:100]}...")
+        
         # Use AI-powered mockup engine with detailed prompts
         from app.engines.ai_mockup_engine_v3 import AIMockupEngineV3
         mockup_engine = AIMockupEngineV3(settings)
@@ -241,51 +247,52 @@ async def generate_preview_task(
             status = "unlocked" if is_key else "locked"
             mockup_url = None
             
-            if is_key and i in raw_image_map and raw_image_map[i]:
-                raw_url = raw_image_map[i]
-                print(f"   🖼️ Creating AI Mockup for Scene {i}...")
-                if i == 0:
-                    print(f"   📚 COVER: theme={theme}, child_name={child_name}, title={story.title}")
-                
-                # Get story text for this scene (for left page)
-                scene_text = ""
-                if i > 0:  # Not cover
-                    scene_data = next((s for s in story.scenes if s.scene_number == i), None)
-                    if scene_data:
-                        scene_text = scene_data.narration_text or ""
-                
-                try:
-                    # Use AI mockup engine with story text and style reference
-                    mockup_bytes = await mockup_engine.create_mockup(
-                        scene_image_url=raw_url,
-                        scene_number=i,
-                        book_title=story.title if i == 0 else None,
-                        story_text=scene_text if i > 0 else None,
-                        theme=theme if i == 0 else None,
-                        child_name=child_name if i == 0 else None,
-                        character_reference_url=approved_portrait_url if i == 0 else None,
-                    )
+            if is_key:
+                # 1. Check if raw image exists
+                raw_url = raw_image_map.get(i)
+                if raw_url:
+                    print(f"🔍 DEBUG BOOKS: Creating Mockup for Scene {i}")
                     
-                    if mockup_bytes:
-                        filename = f"mockup_scene_{i}.jpg"
-                        mockup_url = await storage.upload_image(book_id, mockup_bytes, filename, content_type="image/jpeg")
-                        preview_image_urls.append(mockup_url)
-                        print(f"   ✅ Mockup {i} uploaded")
-                    else:
-                        # Fallback to raw image if mockup fails
-                        mockup_url = raw_url
-                        preview_image_urls.append(raw_url)
-                        print(f"   ⚠️ Using raw image as fallback for scene {i}")
+                    # 2. Get story text (only for internal pages)
+                    scene_text = ""
+                    if i > 0:
+                        scene_data = next((s for s in story.scenes if s.scene_number == i), None)
+                        if scene_data:
+                            scene_text = scene_data.narration_text or ""
                     
-                except Exception as e:
-                    print(f"   ⚠️ Mockup failed for scene {i}: {e}")
-                    mockup_url = raw_url
-                    preview_image_urls.append(raw_url)
-
-                # Increment progress per finished preview image (4 key scenes)
-                current_progress = 45 + (len(preview_image_urls) * 12) # ~45 + 48 = 93%
+                    try:
+                        # 3. Use AI mockup engine
+                        mockup_bytes = await mockup_engine.create_mockup(
+                            scene_image_url=raw_url,
+                            scene_number=i,
+                            book_title=story.title if i == 0 else None,
+                            story_text=scene_text if i > 0 else None,
+                            theme=theme if i == 0 else None,
+                            child_name=child_name if i == 0 else None,
+                            character_reference_url=approved_portrait_url if i == 0 else None,
+                        )
+                        
+                        if mockup_bytes:
+                            filename = f"mockup_scene_{i}.jpg"
+                            mockup_url = await storage.upload_image(book_id, mockup_bytes, filename, content_type="image/jpeg")
+                            print(f"   ✅ Mockup {i} uploaded")
+                        else:
+                            mockup_url = raw_url # Fallback to raw
+                            print(f"   ⚠️ Mockup {i} failed, using raw fallback")
+                    except Exception as e:
+                        print(f"   ❌ Mockup {i} error: {e}")
+                        mockup_url = raw_url # Fallback to raw
+                else:
+                    print(f"   ⚠️ Raw image MISSING for key scene {i}")
+                    mockup_url = "" # Placeholder to keep index consistent
+                
+                # 4. ALWAYS append for key scenes in order [0, 1, 7, 13]
+                preview_image_urls.append(mockup_url)
+                
+                # Update progress
+                current_progress = 45 + (len(preview_image_urls) * 12)
                 await repo.update_status(book_id, BookStatus.GENERATING_PREVIEW, min(current_progress, 95), message=f"Vorschau {len(preview_image_urls)}/4 bereit... ✨")
-            
+
             preview_scenes.append(PreviewScene(
                 scene_id=i,
                 status=status,

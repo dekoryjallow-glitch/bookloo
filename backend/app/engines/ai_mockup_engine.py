@@ -35,8 +35,8 @@ class AIMockupEngine:
     TEMPLATES = {
         0: "cover_template.jpg",      # Cover scene -> closed book
         1: "open_book_nursery.png",   # Scene 1 -> nursery setting
-        5: "open_book_carpet.png",    # Scene 2 -> carpet setting  
-        10: "open_book_clean.png",    # Scene 3 -> clean background
+        7: "open_book_carpet.png",    # Scene 7 -> carpet setting  
+        13: "open_book_clean.png",    # Scene 13 -> clean background
     }
     
     def __init__(self, settings: Optional[Settings] = None):

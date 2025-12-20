@@ -53,9 +53,9 @@ export default function StepPhoto() {
             console.error("Magic failed:", err);
             const msg = err?.message || JSON.stringify(err);
             if (msg.includes("500") || msg.includes("Failed")) {
-                setError("Hoppla! Unsere KI ist gerade überlastet (Model Error). Bitte versuche es noch einmal.");
+                setError(`Debug Error: ${msg}`);
             } else {
-                setError("Das hat leider nicht geklappt. Bitte versuche ein anderes Foto.");
+                setError(`Debug Error: ${msg}`);
             }
         } finally {
             setIsGenerating(false);

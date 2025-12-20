@@ -16,6 +16,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev \
     libgl1 \
     libglib2.0-0 \
+    libheif-dev \
+    libde265-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install python dependencies
