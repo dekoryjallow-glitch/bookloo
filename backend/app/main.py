@@ -22,12 +22,12 @@ async def lifespan(app: FastAPI):
     # Startup
     settings = get_settings()
     initialize_firebase(settings)
-    print(f"🚀 {settings.app_name} starting up...")
+    print(f"{settings.app_name} starting up...")
     
     yield
     
     # Shutdown
-    print(f"👋 {settings.app_name} shutting down...")
+    print(f"{settings.app_name} shutting down...")
 
 
 def create_app() -> FastAPI:

@@ -306,71 +306,54 @@ TYPOGRAPHY REQUIREMENTS (LEFT PAGE):
             
             # Safety settings
             safety_settings = [
-                types.SafetySetting(
-                    category="HARM_CATEGORY_HARASSMENT",
-                    threshold="BLOCK_ONLY_HIGH"
-                ),
-                types.SafetySetting(
-                    category="HARM_CATEGORY_HATE_SPEECH",
-                    threshold="BLOCK_ONLY_HIGH"
-                ),
-                types.SafetySetting(
-                    category="HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                    threshold="BLOCK_ONLY_HIGH"
-                ),
-                types.SafetySetting(
-                    category="HARM_CATEGORY_DANGEROUS_CONTENT",
-                    threshold="BLOCK_ONLY_HIGH"
-                ),
+                types.SafetySetting(category="HARM_CATEGORY_HARASSMENT", threshold="BLOCK_ONLY_HIGH"),
+                types.SafetySetting(category="HARM_CATEGORY_HATE_SPEECH", threshold="BLOCK_ONLY_HIGH"),
+                types.SafetySetting(category="HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold="BLOCK_ONLY_HIGH"),
+                types.SafetySetting(category="HARM_CATEGORY_DANGEROUS_CONTENT", threshold="BLOCK_ONLY_HIGH"),
             ]
             
-            print(f"   🎨 Calling Gemini 2.5 Flash for mockup generation...")
-            
-            # Build contents list: template, scene, [style_ref if present], prompt
+            # Build contents list
             contents = [template_image, scene_image]
-            if style_ref is not None:
-                contents.append(style_ref)
-            if char_ref is not None:
-                contents.append(char_ref)
+            if style_ref is not None: contents.append(style_ref)
+            if char_ref is not None: contents.append(char_ref)
             contents.append(prompt)
             
-            try:
-                response = client.models.generate_content(
-                    model="models/gemini-2.5-flash-image",
-                    contents=contents,
-                    config=types.GenerateContentConfig(
-                        safety_settings=safety_settings,
-                        response_modalities=["image", "text"],
+            max_attempts = 3
+            for attempt in range(max_attempts):
+                try:
+                    print(f"   🎨 Calling Gemini 2.5 Flash for mockup [Attempt {attempt+1}/{max_attempts}]...")
+                    response = client.models.generate_content(
+                        model="models/gemini-2.5-flash-image",
+                        contents=contents,
+                        config=types.GenerateContentConfig(
+                            safety_settings=safety_settings,
+                            response_modalities=["image", "text"],
+                        )
                     )
-                )
-                
-                # Extract image from response
-                if response.candidates:
-                    for candidate in response.candidates:
-                        if candidate.content and candidate.content.parts:
-                            for part in candidate.content.parts:
-                                if hasattr(part, 'inline_data') and part.inline_data:
-                                    image_data = part.inline_data.data
-                                    if isinstance(image_data, str):
-                                        image_data = base64.b64decode(image_data)
-                                    print(f"   ✅ AI Mockup generated successfully!")
-                                    return image_data
-                
-                # Log if no image found
-                print(f"   ⚠️ No image in Gemini response")
-                if response.candidates:
-                    for i, candidate in enumerate(response.candidates):
-                        print(f"   Candidate {i}: finish_reason={candidate.finish_reason}")
-                        if candidate.content:
-                            for part in candidate.content.parts:
-                                if hasattr(part, 'text') and part.text:
-                                    print(f"   Text response: {part.text[:200]}...")
-                return None
-                
-            except Exception as e:
-                print(f"   ❌ Gemini API error: {e}")
-                import traceback
-                traceback.print_exc()
-                return None
+                    
+                    if response.candidates:
+                        for candidate in response.candidates:
+                            if candidate.content and candidate.content.parts:
+                                for part in candidate.content.parts:
+                                    if hasattr(part, 'inline_data') and part.inline_data:
+                                        image_data = part.inline_data.data
+                                        if isinstance(image_data, str):
+                                            image_data = base64.b64decode(image_data)
+                                        print(f"   ✅ AI Mockup generated successfully!")
+                                        return image_data
+                    
+                    print(f"   ⚠️ No image in response (Attempt {attempt+1})")
+                    if attempt < max_attempts - 1:
+                        import time
+                        time.sleep(2 * (attempt + 1))
+                        
+                except Exception as e:
+                    print(f"   ❌ Attempt {attempt+1} failed: {e}")
+                    if attempt < max_attempts - 1:
+                        import time
+                        time.sleep(2 * (attempt + 1))
+                    else:
+                        break
+            return None
         
         return await loop.run_in_executor(None, run_sync)

@@ -9,6 +9,8 @@ Step 2: FLUX Kontext → Uses portrait for scene generation (handled in image_en
 import asyncio
 import base64
 import httpx
+import tempfile
+import os
 from dataclasses import dataclass
 from typing import Optional
 from PIL import Image
@@ -65,19 +67,13 @@ class AssetGenerator:
     ) -> CharacterAsset:
         """
         Generate a Pixar-style character from a child's photo using nano-banana-pro.
-        
-        Uses Google Gemini API with image editing capabilities.
         """
         print(f"🎭 Generating Pixar Character with nano-banana-pro...")
-        print(f"   📷 Reference: {photo_url[:50]}...")
-        if features:
-            print(f"   📝 Using consistency string: {features.consistency_string}")
         
         image_urls = []
         
         try:
             # Download the reference image
-            print(f"   📥 Downloading reference image...")
             image_bytes = await self._download_image(photo_url)
             
             # Build the prompt with features if available
@@ -94,7 +90,7 @@ class AssetGenerator:
             else:
                 prompt = self.PIXAR_STYLE_PROMPT
             
-            print(f"   🎨 Calling nano-banana-pro...")
+            print(f"   🎨 Calling nano-banana-pro (Gemini 2.5 Flash Image)...")
             result_url = await self._run_nano_banana(image_bytes, prompt)
             
             if result_url:
@@ -124,97 +120,72 @@ class AssetGenerator:
     
     async def _run_nano_banana(self, image_bytes: bytes, prompt: str) -> Optional[str]:
         """
-        Call nano-banana (Gemini 2.0 Flash) for image transformation.
-        Uses multimodal input (image + text) to generate Pixar-style character.
+        Call Gemini 2.5 Flash Image for image transformation.
         """
-        loop = asyncio.get_event_loop()
+        max_attempts = 3
         
-        def run_sync():
-            # Use pre-configured client
-            client = self.client
-            
-            # Convert image bytes to PIL for processing
-            input_image = Image.open(BytesIO(image_bytes))
-            
-            print(f"   📸 Calling nano-banana-pro (models/gemini-2.5-flash-image)...")
-            
-            # Configure safety to avoid blocking standard portraits
-            safety_settings = [
-                types.SafetySetting(
-                    category="HARM_CATEGORY_HATE_SPEECH",
-                    threshold="BLOCK_ONLY_HIGH"
-                ),
-                types.SafetySetting(
-                    category="HARM_CATEGORY_DANGEROUS_CONTENT",
-                    threshold="BLOCK_ONLY_HIGH"
-                ),
-                types.SafetySetting(
-                    category="HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                    threshold="BLOCK_ONLY_HIGH"
-                ),
-                types.SafetySetting(
-                    category="HARM_CATEGORY_HARASSMENT",
-                    threshold="BLOCK_ONLY_HIGH"
-                ),
-            ]
-            
-            # Use the correct nano-banana-pro model
-            # The client handles PIL images directly in the contents list
-            response = client.models.generate_content(
-                model="models/gemini-2.5-flash-image",
-                contents=[input_image, prompt],
-                config=types.GenerateContentConfig(
-                    safety_settings=safety_settings
-                )
-            )
-            
-            # Extract generated image from response
-            if response.candidates:
-                for i, candidate in enumerate(response.candidates):
-                    # Log safety/finish reason
-                    if candidate.finish_reason:
-                        print(f"   ⚠️ Candidate {i} Finish Reason: {candidate.finish_reason}")
-                        
+        for attempt in range(max_attempts):
+            try:
+                # PIL processing
+                input_image = Image.open(BytesIO(image_bytes)).convert("RGB")
+                
+                # Resize if too large
+                if max(input_image.size) > 1024:
+                    input_image.thumbnail((1024, 1024), Image.LANCZOS)
+                
+                # Gemini call (Sync) -> but we'll run it in executor to avoid blocking
+                def call_gemini():
+                    safety_settings = [
+                        types.SafetySetting(category="HARM_CATEGORY_HATE_SPEECH", threshold="BLOCK_ONLY_HIGH"),
+                        types.SafetySetting(category="HARM_CATEGORY_DANGEROUS_CONTENT", threshold="BLOCK_ONLY_HIGH"),
+                        types.SafetySetting(category="HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold="BLOCK_ONLY_HIGH"),
+                        types.SafetySetting(category="HARM_CATEGORY_HARASSMENT", threshold="BLOCK_ONLY_HIGH"),
+                    ]
+                    
+                    return self.client.models.generate_content(
+                        model="models/gemini-2.5-flash-image",
+                        contents=[input_image, prompt],
+                        config=types.GenerateContentConfig(
+                            safety_settings=safety_settings
+                        )
+                    )
+
+                print(f"   📸 Attempt {attempt+1}/{max_attempts}...")
+                response = await asyncio.get_event_loop().run_in_executor(None, call_gemini)
+                
+                # Extract image
+                if response.candidates:
+                    candidate = response.candidates[0]
                     if candidate.content and candidate.content.parts:
                         for part in candidate.content.parts:
                             if hasattr(part, 'inline_data') and part.inline_data:
-                                # Got image data
-                                image_data = part.inline_data.data
-                                mime_type = part.inline_data.mime_type
+                                data = part.inline_data.data
+                                mime = part.inline_data.mime_type
                                 
-                                # Save to temp file
-                                import tempfile
-                                import os
+                                ext = "png" if "png" in mime else "jpg"
+                                t_path = os.path.join(tempfile.gettempdir(), f"pixar_{os.urandom(4).hex()}.{ext}")
                                 
-                                ext = "png" if "png" in mime_type else "jpg"
-                                temp_dir = tempfile.gettempdir()
-                                temp_path = os.path.join(temp_dir, f"pixar_portrait_{os.urandom(4).hex()}.{ext}")
-                                
-                                # Decode and save
-                                img_bytes = base64.b64decode(image_data) if isinstance(image_data, str) else image_data
-                                with open(temp_path, 'wb') as f:
+                                img_bytes = base64.b64decode(data) if isinstance(data, str) else data
+                                with open(t_path, 'wb') as f:
                                     f.write(img_bytes)
                                 
-                                print(f"   ✅ Image saved to: {temp_path}")
-                                
-                                # Upload to Firebase for public URL
-                                # For now, return local path (will be handled in books.py)
-                                return f"file://{temp_path}"
-            
-            print(f"   ⚠️ No image found in response. Candidates: {len(response.candidates or [])}")
-            if response.candidates:
-                 for i, c in enumerate(response.candidates):
-                     if c.content and c.content.parts:
-                         for part in c.content.parts:
-                              if hasattr(part, 'text') and part.text:
-                                  print(f"     Text: {part.text[:200]}")
-            
-            return None
-        
-        return await loop.run_in_executor(None, run_sync)
-    
+                                return f"file://{t_path}"
+                
+                print(f"   ⚠️ No image in response (Attempt {attempt+1})")
+                if attempt < max_attempts - 1:
+                    await asyncio.sleep(2 * (attempt + 1))
+                    
+            except Exception as e:
+                print(f"   ❌ Attempt {attempt+1} failed: {e}")
+                if attempt < max_attempts - 1:
+                    await asyncio.sleep(2 * (attempt + 1))
+                else:
+                    return None
+                    
+        return None
+
     def _extract_url(self, output) -> str:
-        """Extract URL from Replicate output."""
+        """Extract URL from Replicate output (fallback)."""
         if isinstance(output, str):
             return output
         elif hasattr(output, 'url'):
@@ -223,7 +194,6 @@ class AssetGenerator:
             item = output[0]
             return str(item.url if hasattr(item, 'url') else item)
         else:
-            # Try to iterate
             result = list(output)
             if result:
                 item = result[0]

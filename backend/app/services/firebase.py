@@ -48,7 +48,7 @@ def initialize_firebase(settings: Settings) -> None:
     _db = firestore.client()
     _bucket = storage.bucket()
     
-    print("✅ Firebase initialized successfully")
+    print("Firebase initialized successfully")
 
 
 def get_db() -> firestore.Client:
