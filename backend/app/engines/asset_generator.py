@@ -134,24 +134,37 @@ class AssetGenerator:
                     input_image.thumbnail((1024, 1024), Image.LANCZOS)
                 
                 # Gemini call (Sync) -> but we'll run it in executor to avoid blocking
-                def call_gemini():
+                def call_gemini(current_prompt):
+                    # Use BLOCK_NONE to avoid safety false positives
                     safety_settings = [
-                        types.SafetySetting(category="HARM_CATEGORY_HATE_SPEECH", threshold="BLOCK_ONLY_HIGH"),
-                        types.SafetySetting(category="HARM_CATEGORY_DANGEROUS_CONTENT", threshold="BLOCK_ONLY_HIGH"),
-                        types.SafetySetting(category="HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold="BLOCK_ONLY_HIGH"),
-                        types.SafetySetting(category="HARM_CATEGORY_HARASSMENT", threshold="BLOCK_ONLY_HIGH"),
+                        types.SafetySetting(category="HARM_CATEGORY_HATE_SPEECH", threshold="BLOCK_NONE"),
+                        types.SafetySetting(category="HARM_CATEGORY_DANGEROUS_CONTENT", threshold="BLOCK_NONE"),
+                        types.SafetySetting(category="HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold="BLOCK_NONE"),
+                        types.SafetySetting(category="HARM_CATEGORY_HARASSMENT", threshold="BLOCK_NONE"),
                     ]
                     
                     return self.client.models.generate_content(
                         model="models/gemini-2.5-flash-image",
-                        contents=[input_image, prompt],
+                        contents=[input_image, current_prompt],
                         config=types.GenerateContentConfig(
                             safety_settings=safety_settings
                         )
                     )
 
-                print(f"   📸 Attempt {attempt+1}/{max_attempts}...")
-                response = await asyncio.get_event_loop().run_in_executor(None, call_gemini)
+                # Fallback Prompt Logic: If first attempt fails, try a softer prompt
+                current_prompt = prompt
+                if attempt > 0:
+                    print(f"   ⚠️ Switching to fallback prompt for attempt {attempt+1}...")
+                    # Simpler prompt, removing specific style constraints that might trigger filters
+                    current_prompt = (
+                        "Transform this person into a 3D animated character. "
+                        "Cartoon style, cute portrait, vibrant colors, smooth 3D render. "
+                        "Keep the facial features and skin tone. "
+                        "Clean white background."
+                    )
+
+                print(f"   📸 Attempt {attempt+1}/{max_attempts} with prompt: {current_prompt[:50]}...")
+                response = await asyncio.get_event_loop().run_in_executor(None, lambda: call_gemini(current_prompt))
                 
                 # Extract image
                 if response.candidates:
@@ -172,6 +185,12 @@ class AssetGenerator:
                                 return f"file://{t_path}"
                 
                 print(f"   ⚠️ No image in response (Attempt {attempt+1})")
+                
+                # Check for safety finish reason
+                if response.candidates and response.candidates[0].finish_reason:
+                     reason = response.candidates[0].finish_reason
+                     print(f"   🛑 Finish Reason: {reason}")
+                
                 if attempt < max_attempts - 1:
                     await asyncio.sleep(2 * (attempt + 1))
                     
